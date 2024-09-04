@@ -53,6 +53,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -211,7 +212,9 @@ public class GenerateModels {
             if (listRootFieldModel instanceof EmptyFieldModel) {
                 listHierarchy.add(0, listNodeInfo);
             } else {
-                listHierarchy.add(listNodeInfo);
+                if (!hasDuplicate(listNodeInfo, listHierarchy)) {
+                    listHierarchy.add(listNodeInfo);
+                }
             }
         });
 
@@ -236,6 +239,20 @@ public class GenerateModels {
         }
 
         return logicalNameToNameMap;
+    }
+
+    private boolean hasDuplicate(final String[] listNodeInfo, final List<String[]> listHierarchy) {
+        //avoid duplicates
+        boolean found = false;
+        for (final String[] item : listHierarchy) {
+            if (item[0].equals(listNodeInfo[0])) {
+                System.err.println("Found duplicate item [" + item[0] + "]. Ignoring " + Arrays.toString(listNodeInfo));
+                found = true;
+                break;
+            }
+        }
+
+        return found;
     }
 
     private String getPackageForList(final String rootId) {
