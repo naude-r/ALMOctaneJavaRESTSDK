@@ -36,6 +36,7 @@ import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -45,7 +46,7 @@ public final class ModelParser {
     private static final String JSON_ERRORS_NAME = "errors";
     private static final String JSON_TOTAL_COUNT_NAME = "total_count";
     private static final String JSON_EXCEEDS_TOTAL_COUNT_NAME = "exceeds_total_count";
-    private static final String LOGGER_INVALID_FIELD_SCHEME_FORMAT = "{} field scheme is invalid";
+    private static final String LOGGER_INVALID_FIELD_SCHEME_FORMAT = "{} field scheme is invalid ({})";
 
     private final Logger logger = LoggerFactory.getLogger(ModelParser.class.getName());
 
@@ -141,6 +142,8 @@ public final class ModelParser {
                 fldModel = new LongFieldModel(strKey, Long.parseLong(aObj.toString()));
             } else if (aObj instanceof Double || aObj instanceof Float) {
                 fldModel = new FloatFieldModel(strKey, Float.parseFloat(aObj.toString()));
+            } else if (aObj instanceof BigDecimal) {
+                fldModel = new FloatFieldModel(strKey, new BigDecimal(aObj.toString()).floatValue());
             } else if (aObj instanceof Boolean) {
                 fldModel = new BooleanFieldModel(strKey, Boolean.parseBoolean(aObj.toString()));
             } else if (aObj instanceof JSONArray) {
@@ -170,7 +173,7 @@ public final class ModelParser {
                 }
 
             } else {
-                logger.debug(LOGGER_INVALID_FIELD_SCHEME_FORMAT, strKey);
+                logger.debug(LOGGER_INVALID_FIELD_SCHEME_FORMAT, strKey, aObj.getClass());
                 continue; //do not put it inside the model object to avoid a null pointer exception
             }
 
