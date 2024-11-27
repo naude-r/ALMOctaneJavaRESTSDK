@@ -1,0 +1,3 @@
+before_install:
+  - find . -name "pom.xml" | xargs sed -i "s/<version>24.3-SNAPSHOT<\/version>/<version>${VERSION}<\/version>/g"
+  - find . -name "pom.xml" | xargs sed -i "s/<groupId>com.microfocus.adm.almoctane.sdk<\/groupId>/<groupId>com.github.naude-r.ALMOctaneJavaRESTSDK<\/groupId>/g"
