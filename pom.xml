@@ -229,6 +229,7 @@
                     <excludes>
                         <exclude>README.MD</exclude>
                         <exclude>.gitignore</exclude>
+                        <exclude>jitpack.yml</exclude>
                         <exclude>.LICENSE.txt</exclude>
                         <exclude>**/**.html</exclude>
                         <exclude>**/**.vm</exclude>
