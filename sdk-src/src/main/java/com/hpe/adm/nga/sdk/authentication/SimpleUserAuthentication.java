@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023 Open Text.
+ * Copyright 2016-2025 Open Text.
  *
  * The only warranties for products and services of Open Text and
  * its affiliates and licensors (“Open Text”) are as may be set forth
@@ -29,6 +29,7 @@
 package com.hpe.adm.nga.sdk.authentication;
 
 import com.hpe.adm.nga.sdk.APIMode;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  * Default class to enable user authentications
@@ -47,7 +48,7 @@ public class SimpleUserAuthentication extends UserAuthentication {
      */
     public SimpleUserAuthentication(final String userName, final String password, final APIMode apiMode) {
         super(apiMode);
-        this.userName = userName;
+        this.userName = StringEscapeUtils.escapeJava(userName);
         this.password = password;
     }
 

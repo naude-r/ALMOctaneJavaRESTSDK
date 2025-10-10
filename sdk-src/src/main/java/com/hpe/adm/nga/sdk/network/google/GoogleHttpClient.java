@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023 Open Text.
+ * Copyright 2016-2025 Open Text.
  *
  * The only warranties for products and services of Open Text and
  * its affiliates and licensors (“Open Text”) are as may be set forth
@@ -470,17 +470,19 @@ public class GoogleHttpClient implements OctaneHttpClient {
             if (httpResponseException.getStatusCode() == 401) {
                 try {
                     final String cookie = httpRequest.getHeaders().getCookie();
+                    final LongFieldModel statusFieldModel = new LongFieldModel(ErrorModel.HTTP_STATUS_CODE_PROPERTY_NAME, (long) httpResponseException.getStatusCode());
+                    final ErrorModel errorModel = new ErrorModel(Collections.singleton(statusFieldModel));
                     if (cookie != null) {
                         for (String splitCookie : cookie.split(";")) {
+                            // assuming that we have a cookie and therefore can go for re-authentication...
                             if (splitCookie.startsWith(LWSSO_COOKIE_KEY)) {
-                                final LongFieldModel statusFieldModel = new LongFieldModel(ErrorModel.HTTP_STATUS_CODE_PROPERTY_NAME, (long) httpResponseException.getStatusCode());
-                                final ErrorModel errorModel = new ErrorModel(Collections.singleton(statusFieldModel));
-                                // assuming that we have a cookie and therefore can go for re-authentication...
                                 errorModel.setValue(new StringFieldModel("errorCode", ERROR_CODE_TOKEN_EXPIRED));
                                 return new OctaneException(errorModel);
                             }
                         }
                     }
+                    errorModel.setValue(new StringFieldModel("errorCode", httpResponseException.getStatusMessage()));
+                    return new OctaneException(errorModel);
                 } catch (NullPointerException e) {
                     // do nothing
                 }
