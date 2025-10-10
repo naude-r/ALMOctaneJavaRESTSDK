@@ -230,6 +230,8 @@
                         <exclude>README.MD</exclude>
                         <exclude>.gitignore</exclude>
                         <exclude>jitpack.yml</exclude>
+                        <exclude>mvnw.cmd</exclude>
+                        <exclude>mvnw</exclude>
                         <exclude>.LICENSE.txt</exclude>
                         <exclude>**/**.html</exclude>
                         <exclude>**/**.vm</exclude>
